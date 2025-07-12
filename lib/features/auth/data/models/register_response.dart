@@ -2,7 +2,7 @@ import 'User.dart';
 
 class RegisterResponse {
   final String message;
-  final User user;
+  final UserModel user;
   final String token;
 
   RegisterResponse({
@@ -14,7 +14,7 @@ class RegisterResponse {
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
     return RegisterResponse(
       message: json['message'] as String,
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
       token: json['token'] as String,
     );
   }

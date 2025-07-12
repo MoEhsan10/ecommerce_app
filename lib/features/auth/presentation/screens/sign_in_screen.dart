@@ -4,14 +4,15 @@ import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/routes_manager/routes.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
 import 'package:ecommerce_app/core/widget/main_text_field.dart';
+import 'package:ecommerce_app/core/widget/ui_utils.dart';
 import 'package:ecommerce_app/core/widget/validators.dart';
 import 'package:ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:ecommerce_app/features/auth/cubit/auth_state.dart';
 import 'package:ecommerce_app/features/auth/data/models/Login_request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../../core/resources/font_manager.dart';
 import '../../../../core/resources/styles_manager.dart';
 
@@ -64,8 +65,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   BuildTextField(
                     controller: _emailController,
                     backgroundColor: ColorManager.white,
-                    hint: 'enter your name',
-                    label: 'User name',
+                    hint: 'enter your email',
+                    label: 'Email',
                     textInputType: TextInputType.emailAddress,
                     validation: AppValidators.validateEmail,
                   ),
@@ -102,22 +103,35 @@ class _SignInScreenState extends State<SignInScreen> {
                   Center(
                     child: SizedBox(
                       // width: MediaQuery.of(context).size.width * .8,
-                      child: CustomElevatedButton(
-                        // borderRadius: AppSize.s8,
-                        isStadiumBorder: false,
-                        label: 'Login',
-                        backgroundColor: ColorManager.white,
-                        textStyle: getBoldStyle(
-                            color: ColorManager.primary, fontSize: AppSize.s18),
-                        onTap: () {
-                          if(_formKey.currentState!.validate()){
-                            context.read<AuthCubit>().login(
-                              LoginRequest(email: _emailController.text, password: _passwordController.text) ,
-                            );
+                      child: BlocListener<AuthCubit,AuthState>(
+                        listener: (context, state) {
+                          if(state is LoginLoading){
+                            UIUtils.showLoading(context);
+                          }else if(state is LoginSuccess){
+                            UIUtils.hideLoading(context);
+                            Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
+                          }else if(state is LoginError){
+                            UIUtils.hideLoading(context);
+                            UIUtils.showMessage(context, state.errorMessage);
                           }
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, Routes.mainRoute, (route) => false);
                         },
+                        child: CustomElevatedButton(
+                          // borderRadius: AppSize.s8,
+                          isStadiumBorder: false,
+                          label: 'Login',
+                          backgroundColor: ColorManager.white,
+                          textStyle: getBoldStyle(
+                              color: ColorManager.primary, fontSize: AppSize.s18),
+                          onTap: () {
+                            if(_formKey.currentState!.validate()){
+                              context.read<AuthCubit>().login(
+                                LoginRequest(email: _emailController.text, password: _passwordController.text) ,
+                              );
+                            }
+                            // Navigator.pushNamedAndRemoveUntil(
+                            //     context, Routes.mainRoute, (route) => false);
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -137,7 +151,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       GestureDetector(
                         onTap: () =>
-                            Navigator.pushNamed(context, Routes.signUpRoute),
+                            Navigator.pushReplacementNamed(context, Routes.signUpRoute),
                         child: Text(
                           'Create Account',
                           style: getSemiBoldStyle(color: ColorManager.white)
@@ -154,6 +168,9 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
+
+
+
   @override
   void dispose(){
     _emailController.dispose();

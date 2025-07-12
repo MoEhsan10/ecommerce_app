@@ -8,11 +8,11 @@ class LoginResponse {
 
   LoginResponse.fromJson(dynamic json) {
     message = json['message'];
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
     token = json['token'];
   }
   String? message;
-  User? user;
+  UserModel? user;
   String? token;
 
 }
