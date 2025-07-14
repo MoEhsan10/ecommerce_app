@@ -24,7 +24,7 @@ class CustomAdsWidget extends StatelessWidget {
       child: Stack(
         children: [
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 2000),
             child: Image.asset(
               height: 210.h,
               width: double.infinity,

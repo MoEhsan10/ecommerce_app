@@ -27,6 +27,18 @@ import 'package:ecommerce_app/features/auth/domain/use_cases/login.dart'
     as _i699;
 import 'package:ecommerce_app/features/auth/domain/use_cases/register.dart'
     as _i637;
+import 'package:ecommerce_app/features/main_layout/home/data/data_sources/remote/home_api_remote_data_source.dart'
+    as _i689;
+import 'package:ecommerce_app/features/main_layout/home/data/data_sources/remote/home_remote_data_source.dart'
+    as _i369;
+import 'package:ecommerce_app/features/main_layout/home/data/repositories/home_repository_impl.dart'
+    as _i447;
+import 'package:ecommerce_app/features/main_layout/home/domain/repositories/home_repository.dart'
+    as _i548;
+import 'package:ecommerce_app/features/main_layout/home/domain/use_cases/get_categories.dart'
+    as _i216;
+import 'package:ecommerce_app/features/main_layout/home/presentation/cubit/home_cubit.dart'
+    as _i948;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -48,11 +60,19 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i361.Dio>(() => registerModule.dio());
+    gh.lazySingleton<_i369.HomeRemoteDataSource>(
+        () => _i689.HomeApiRemoteDataSource(gh<_i361.Dio>()));
     gh.singleton<_i1050.AuthLocalDataSource>(() =>
         _i932.AuthSharedPrefLocalDataSource(
             sharedPref: gh<_i460.SharedPreferences>()));
     gh.singleton<_i255.AuthRemoteDataSource>(
         () => _i873.AuthApiRemoteDataSource(dio: gh<_i361.Dio>()));
+    gh.lazySingleton<_i548.HomeRepository>(
+        () => _i447.HomeRepositoryImpl(gh<_i369.HomeRemoteDataSource>()));
+    gh.lazySingleton<_i216.GetCategories>(
+        () => _i216.GetCategories(gh<_i548.HomeRepository>()));
+    gh.lazySingleton<_i948.HomeCubit>(
+        () => _i948.HomeCubit(gh<_i216.GetCategories>()));
     gh.singleton<_i804.AuthRepository>(() => _i386.AuthRepositoryImpl(
           authRemoteDataSource: gh<_i255.AuthRemoteDataSource>(),
           authLocalDataSource: gh<_i1050.AuthLocalDataSource>(),
