@@ -39,6 +39,18 @@ import 'package:ecommerce_app/features/main_layout/home/domain/use_cases/get_cat
     as _i216;
 import 'package:ecommerce_app/features/main_layout/home/presentation/cubit/home_cubit.dart'
     as _i948;
+import 'package:ecommerce_app/features/products_screen/data/data_sources/remote/products_api_remote_data_source.dart'
+    as _i302;
+import 'package:ecommerce_app/features/products_screen/data/data_sources/remote/products_remote_data_source.dart'
+    as _i1062;
+import 'package:ecommerce_app/features/products_screen/data/repositories/products_repository_impl.dart'
+    as _i486;
+import 'package:ecommerce_app/features/products_screen/domain/repositories/products_repository.dart'
+    as _i981;
+import 'package:ecommerce_app/features/products_screen/domain/use_cases/get_products.dart'
+    as _i937;
+import 'package:ecommerce_app/features/products_screen/presentation/cubit/products_cubit.dart'
+    as _i829;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -65,6 +77,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i1050.AuthLocalDataSource>(() =>
         _i932.AuthSharedPrefLocalDataSource(
             sharedPref: gh<_i460.SharedPreferences>()));
+    gh.lazySingleton<_i1062.ProductsRemoteDataSource>(
+        () => _i302.ProductsAPIRemoteDataSource(gh<_i361.Dio>()));
     gh.singleton<_i255.AuthRemoteDataSource>(
         () => _i873.AuthApiRemoteDataSource(dio: gh<_i361.Dio>()));
     gh.lazySingleton<_i548.HomeRepository>(
@@ -73,10 +87,16 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i216.GetCategories(gh<_i548.HomeRepository>()));
     gh.lazySingleton<_i948.HomeCubit>(
         () => _i948.HomeCubit(gh<_i216.GetCategories>()));
+    gh.lazySingleton<_i981.ProductsRepository>(() =>
+        _i486.ProductsRepositoryImpl(gh<_i1062.ProductsRemoteDataSource>()));
     gh.singleton<_i804.AuthRepository>(() => _i386.AuthRepositoryImpl(
           authRemoteDataSource: gh<_i255.AuthRemoteDataSource>(),
           authLocalDataSource: gh<_i1050.AuthLocalDataSource>(),
         ));
+    gh.lazySingleton<_i937.GetProducts>(
+        () => _i937.GetProducts(gh<_i981.ProductsRepository>()));
+    gh.factory<_i829.ProductsCubit>(
+        () => _i829.ProductsCubit(gh<_i937.GetProducts>()));
     gh.singleton<_i699.Login>(() => _i699.Login(gh<_i804.AuthRepository>()));
     gh.singleton<_i637.Register>(
         () => _i637.Register(gh<_i804.AuthRepository>()));

@@ -3,7 +3,7 @@ import 'package:ecommerce_app/core/error/exceptions.dart';
 import 'package:ecommerce_app/core/error/failure.dart';
 import 'package:ecommerce_app/features/main_layout/home/data/data_sources/remote/home_remote_data_source.dart';
 import 'package:ecommerce_app/features/main_layout/home/data/mappers/category_mapper.dart';
-import 'package:ecommerce_app/features/main_layout/home/data/models/category_model.dart';
+import 'package:ecommerce_app/core/models/category_model.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/entities/category.dart';
 import 'package:ecommerce_app/features/main_layout/home/domain/repositories/home_repository.dart';
 import 'package:injectable/injectable.dart';
