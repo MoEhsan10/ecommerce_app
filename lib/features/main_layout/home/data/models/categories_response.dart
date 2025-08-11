@@ -1,5 +1,5 @@
 import 'metadata.dart';
-import 'category_model.dart';
+import '../../../../../core/models/category_model.dart';
 
 class CategoriesResponse {
   final num results;

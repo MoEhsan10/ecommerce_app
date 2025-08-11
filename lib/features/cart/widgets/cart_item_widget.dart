@@ -3,7 +3,6 @@ import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/routes_manager/routes.dart';
-import 'package:ecommerce_app/core/widget/product_counter.dart';
 import 'package:ecommerce_app/features/cart/widgets/color_and_size_cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -121,11 +120,11 @@ class CartItemWidget extends StatelessWidget {
                               fontSize: AppSize.s18.sp),
                         ),
                       ),
-                      ProductCounter(
-                        add: onIncrementTap,
-                        productCounter: quantity,
-                        remove: onDecrementTap,
-                      )
+                      // // ProductCounter(
+                      // //   add: onIncrementTap,
+                      // //   productCounter: quantity,
+                      // //   remove: onDecrementTap,
+                      // )
                     ],
                   ),
                 ],
