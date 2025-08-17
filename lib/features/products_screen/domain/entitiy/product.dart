@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/core/models/category_model.dart';
-import 'package:ecommerce_app/features/products_screen/data/models/brand_model.dart';
+import 'package:ecommerce_app/core/models/brand_model.dart';
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable{

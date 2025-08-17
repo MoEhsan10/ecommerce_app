@@ -3,6 +3,7 @@ import 'package:ecommerce_app/core/resources/assets_manager.dart';
 import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
 import 'package:ecommerce_app/core/widget/custom_elevated_button.dart';
+import 'package:ecommerce_app/features/cart/presentation/cubit/cart_cubit.dart';
 import 'package:ecommerce_app/features/product_details/presentation/widgets/product_color.dart';
 import 'package:ecommerce_app/features/product_details/presentation/widgets/product_description.dart';
 import 'package:ecommerce_app/features/product_details/presentation/widgets/product_item.dart';
@@ -146,7 +147,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Expanded(
                     child: CustomElevatedButton(
                       label: 'Add to cart',
-                      onTap: () {},
+                      onTap: () => context.read<CartCubit>().addToCart(product.id),
                       prefixIcon: Icon(
                         Icons.add_shopping_cart_outlined,
                         color: ColorManager.white,

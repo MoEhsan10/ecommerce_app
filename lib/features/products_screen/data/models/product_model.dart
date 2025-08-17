@@ -1,6 +1,6 @@
 import 'package:ecommerce_app/core/models/category_model.dart';
 
-import 'brand_model.dart';
+import '../../../../core/models/brand_model.dart';
 
 class ProductsModel {
   final String id;

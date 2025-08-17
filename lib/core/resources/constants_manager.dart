@@ -5,6 +5,7 @@ class AppConstants {
   static const String searchHint = "what do you search for?";
   static const String addToCart = "Add to Cart";
 
+
   static List<Map<String, dynamic>> favoriteProducts = [
     {
       "title": "Nike Air Jordon",
@@ -63,6 +64,8 @@ class ApiConstants{
   static const String loginEndpoint = "auth/signin";
   static const String categoryEndpoint = "categories";
   static const String productsEndpoint = "products";
+  static const String cartEndpoint = "cart";
+  static const String tokenKey = "token";
 }
 
 class CacheConstants{
