@@ -2,6 +2,9 @@ import 'package:ecommerce_app/core/di/service_locator.dart';
 import 'package:ecommerce_app/core/resources/values_manager.dart';
 import 'package:ecommerce_app/core/widget/error_indicator.dart';
 import 'package:ecommerce_app/core/widget/loading_indicator.dart';
+import 'package:ecommerce_app/core/widget/ui_utils.dart';
+import 'package:ecommerce_app/features/cart/presentation/cubit/cart_cubit.dart';
+import 'package:ecommerce_app/features/cart/presentation/cubit/cart_states.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/cubit/products_cubit.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/cubit/products_states.dart';
 import 'package:ecommerce_app/features/products_screen/presentation/widgets/custom_product_widget.dart';
@@ -33,40 +36,53 @@ class _ProductsScreenState extends State<ProductsScreen> {
             Expanded(
               child: BlocProvider(
                 create: (_) => serviceLocator.get<ProductsCubit>()..getProducts(categoryId: categoryId),
-                child: BlocBuilder<ProductsCubit, ProductsStates>(
-                  builder: (context, state) {
-                    if(state is GetProductLoading){
-                      return const LoadingIndicator();
-                    }else if(state is GetProductError){
-                      return ErrorIndicator(message: state.message);
-                    }else if(state is GetProductSuccess){
-
-                      if(state.products.isEmpty) {
-                        return const Center(
-                          child: Text('No products found'),
-                        );
-                      }
-
-                      return GridView.builder(
-                        itemCount: state.products.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                          childAspectRatio: 7 / 9,
-                        ),
-                        itemBuilder: (context, index) {
-                          final product = state.products[index];
-                          return CustomProductWidget(product: product,);
-                        },
-                        scrollDirection: Axis.vertical,
-                      );
-                    } else {
-                      return const Center(
-                        child: Text('Something went wrong'),
-                      );
+                child: BlocListener<CartCubit,CartState>(
+                  listener: (_, state) {
+                    if(state is AddToCartLoading){
+                      UIUtils.showLoading(context);
+                    }else if(state is AddToCartError){
+                      UIUtils.hideLoading(context);
+                      UIUtils.showMessage(context, state.message);
+                    }else if(state is AddToCartSuccess){
+                      UIUtils.hideLoading(context);
+                      UIUtils.showMessage(context, "Product added to cart successfully");
                     }
                   },
+                  child: BlocBuilder<ProductsCubit, ProductsStates>(
+                    builder: (context, state) {
+                      if(state is GetProductLoading){
+                        return const LoadingIndicator();
+                      }else if(state is GetProductError){
+                        return ErrorIndicator(message: state.message);
+                      }else if(state is GetProductSuccess){
+
+                        if(state.products.isEmpty) {
+                          return const Center(
+                            child: Text('No products found'),
+                          );
+                        }
+
+                        return GridView.builder(
+                          itemCount: state.products.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 8,
+                            childAspectRatio: 7 / 9,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = state.products[index];
+                            return CustomProductWidget(product: product,);
+                          },
+                          scrollDirection: Axis.vertical,
+                        );
+                      } else {
+                        return const Center(
+                          child: Text('Something went wrong'),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             )
